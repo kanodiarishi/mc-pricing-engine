@@ -1,8 +1,11 @@
 name: CI
 
+# Pushes to a branch with an open PR would otherwise run every check twice: once for
+# `push` and once for `pull_request`. Restricting `push` to main means branch work is
+# covered by the PR trigger, and main is covered directly after a merge.
 on:
   push:
-    branches: ["**"]
+    branches: [main]
   pull_request:
 
 # A later push to the same branch makes an in-flight run irrelevant.
