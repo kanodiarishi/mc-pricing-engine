@@ -1,0 +1,87 @@
+[project]
+name = "mcpricer"
+version = "0.1.0"
+description = "A Monte Carlo engine for path-dependent and structured equity derivatives"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Rishi Kanodia" }]
+keywords = ["monte-carlo", "derivatives", "quantitative-finance", "variance-reduction"]
+dependencies = [
+    "numpy>=1.26",
+    "matplotlib>=3.8",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "hypothesis>=6.100",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mcpricer"]
+
+# --------------------------------------------------------------------------- #
+# Testing
+# --------------------------------------------------------------------------- #
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers --strict-config"
+markers = [
+    "slow: tests that run large simulations (deselect with '-m \"not slow\"')",
+]
+
+# --------------------------------------------------------------------------- #
+# Linting and formatting
+# --------------------------------------------------------------------------- #
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # import sorting
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "RUF",  # ruff-specific
+]
+ignore = [
+    # Mathematical notation beats PEP 8 naming in a pricing library. `S0`, `K`, `T`,
+    # `N`, `W` are the names used in every derivation in docs/theory, and renaming them
+    # to `s0`, `k`, `t` would make the code harder to check against the mathematics.
+    # This is a deliberate, narrow exemption: only naming, and only for these rules.
+    "N803",  # argument name should be lowercase
+    "N806",  # variable in function should be lowercase
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Property-based tests legitimately assert on expressions rather than bind them.
+"tests/**" = ["B011"]
+
+# --------------------------------------------------------------------------- #
+# Type checking
+# --------------------------------------------------------------------------- #
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+disallow_any_explicit = false  # numpy's typing occasionally requires Any at boundaries
+files = ["src"]
+
+[[tool.mypy.overrides]]
+module = "matplotlib.*"
+ignore_missing_imports = true
