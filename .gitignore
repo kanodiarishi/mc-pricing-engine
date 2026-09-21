@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+
+# Environments
+.venv/
+venv/
+
+# Session tooling (not part of the project)
+.remember/
+
+# Generated figures are reproducible by `scripts/regenerate_figures.py`,
+# but we commit them so the README renders on GitHub. See docs/theory/.
+# (Nothing ignored here yet — revisit in Stage 7.)
+
+# OS
+.DS_Store
